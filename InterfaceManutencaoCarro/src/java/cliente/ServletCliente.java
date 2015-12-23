@@ -5,6 +5,7 @@
  */
 package cliente;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -23,13 +24,16 @@ import unioeste.geral.bo.endereco.*;
 import unioeste.geral.bo.pessoa.*;
 import unioeste.geral.bo.pessoafisica.*;
 import unioeste.geral.bo.telefone.*;
+import unioeste.manutencao.serv.cliente.DaoCliente;
 
 /**
  *
  * @author leoscalco
  */
 public class ServletCliente extends HttpServlet {
-
+    
+    private static final long serialVersionUID = 1L;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,15 +45,17 @@ public class ServletCliente extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
-        String action = request.getServletPath().substring(request.getServletPath().lastIndexOf("/")+1, 
-                    request.getServletPath().length());
-        if(action.equals("cadastrar")){
+        String action = request.getServletPath().substring(request.getServletPath().lastIndexOf("/") + 1,
+                request.getServletPath().length());
+        if (action.equals("cadastrar")) {
             cadastrar(request, response);
-                response.sendRedirect("/InterfaceManutencaoCarro/"); 
+            response.sendRedirect("/InterfaceManutencaoCarro/");
+        } else if (action.equals("autocomplete")) {
+            autoComplete(request, response);
         }
     }
-    
-     void cadastrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, Exception{
+
+    void cadastrar(HttpServletRequest request, HttpServletResponse response) throws SQLException, Exception {
         Cliente cliente = new Cliente();
         NomePessoa np = new NomePessoa();
         List<EnderecoEspecifico> lee = new ArrayList<>();
@@ -63,26 +69,26 @@ public class ServletCliente extends HttpServlet {
         Logradouro l = new Logradouro();
         Cidade c = new Cidade();
         Uf u = new Uf();
-        
+
         CPF cpf = new CPF();
         DocIdentidade di = new DocIdentidade();
         Sexo sexo = new Sexo();
-        
+
         cpf.setNroCPF(Integer.parseInt(request.getParameter("cpf")));
-         sexo.setNomeSexo("m");
+        sexo.setNomeSexo("m");
         di.setRg(Integer.parseInt(request.getParameter("reg")));
-        
+
         String rua = request.getParameter("rua");
-        
+
         b.setNome(request.getParameter("bairro"));
         tl.setNome(rua.substring(0, rua.indexOf(" ")));
-        l.setNome(rua.substring(rua.indexOf(" ")+1, rua.length()));
+        l.setNome(rua.substring(rua.indexOf(" ") + 1, rua.length()));
         c.setNome(request.getParameter("cidade"));
         u.setNome(request.getParameter("estado"));
-        u.setSiglaUf(request.getParameter("estado"));  
+        u.setSiglaUf(request.getParameter("estado"));
         l.setTipo(tl);
         c.setUf(u);
-        
+
         endereco.setBairro(b);
         endereco.setCidade(c);
         endereco.setRua(l);
@@ -91,42 +97,40 @@ public class ServletCliente extends HttpServlet {
         ee.setComplementoEndereco(request.getParameter("complemento"));
         ee.setNroEndereco(Integer.parseInt(request.getParameter("numero")));
         lee.add(ee);
-        
+
         np.setNomeCompleto(request.getParameter("nome"));
         f.setNroFone(Integer.parseInt(request.getParameter("telefone")));
         tf.setNomeTipoFone(request.getParameter("tipofone"));
         lf.add(f);
-        
+
         cliente.setNomePessoa(np);
         cliente.setTipoPessoa('f');
         cliente.setEnderecoEspecifico(lee);
         cliente.setFone(lf);
-        
+
         UCCliente uc = new UCCliente();
-        
+
         uc.cadastrar(cliente, sexo, cpf, di);
-         
+
 //        UCEnderecoGeralServicos ub = new UCEnderecoGeralServicos();
-        
 //        ub.cadastrar(request.getParameter("cep"), b, c,l, tl, u);   
-         
     }
-     
-     void teste(HttpServletRequest request, HttpServletResponse response) throws IOException{
-         response.setContentType("text/html;charset=UTF-8");
+
+    void teste(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ServletCliente</title>");            
+            out.println("<title>Servlet ServletCliente</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ServletCliente at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-     }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -174,5 +178,24 @@ public class ServletCliente extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void autoComplete(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, Exception {
+       
+        response.setContentType("application/json");
+        response.setHeader("Cache-control", "no-cache, no-store");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "-1");
+        String query;
+        query = request.getParameter("term");
+         
+        UCCliente uc = new UCCliente();
+        ArrayList<String> result = new ArrayList<>();
+        
+        result = uc.autoComplete(query);
+        String searchList = new Gson().toJson(result);
+        response.getWriter().write(searchList);
+      
+            
+    }
 
 }

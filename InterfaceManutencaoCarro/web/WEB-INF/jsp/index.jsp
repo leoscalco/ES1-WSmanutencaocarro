@@ -21,14 +21,14 @@
     <body>
         <div class="container">
             <%--<jsp:include page="views/structure/cabecalho.jsp"></jsp:include>--%> 
-            <h1>Sistema de Estoque - es1</h1>
+            <h1>Sistema de Manutenção de Veículos - es1</h1>
             <div class="row">
                 <div class="col-sm-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Produto</div>
+                        <div class="panel-heading">Veículos</div>
                         <div class="panel-body">
                           <ul>                                                   
-                              <li><a href="views/produto/cadastrar.jsp">Cadastrar produto</a></li>
+                              <li><a href="views/veiculo/cadastrar.jsp">Cadastrar veículo</a></li>
                           </ul>                          
                         </div>
                     </div>
@@ -40,7 +40,8 @@
                         <div class="panel-heading">Clientes</div>
                         <div class="panel-body">
                           <ul>
-                              <li><a href="views/cliente/cadastrar.jsp">Cadastrar cliente Fisíco</a></li>                              
+                              <li><a href="views/cliente/cadastrar.jsp">Cadastrar cliente Fisíco</a></li>      
+                              <li><a href="views/cliente/listar.jsp">Listar clientes</a></li>        
                           </ul>
                           
                         </div>
