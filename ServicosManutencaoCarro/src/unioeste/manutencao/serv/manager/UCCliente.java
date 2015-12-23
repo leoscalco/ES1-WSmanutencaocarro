@@ -13,6 +13,7 @@ import unioeste.manutencao.serv.endereco.DaoTipoLogradouro;
 import unioeste.manutencao.serv.endereco.DaoCidade;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import unioeste.manutencao.infra.configuracao.ConexaoMySQL;
 import unioeste.manutencao.bo.cliente.Cliente;
@@ -133,4 +134,17 @@ public class UCCliente {
         
         fecharConexao();
     }
+ 
+    public ArrayList<String> autoComplete(String term) throws SQLException, Exception{
+        conn = abrirConexao();
+        
+        DaoCliente dao = new DaoCliente(conn);
+        ArrayList<String> ret = new ArrayList<>();
+        ret = dao.clientesByNome(term);
+        
+        fecharConexao();
+        
+        return ret;
+    }
+    
 }

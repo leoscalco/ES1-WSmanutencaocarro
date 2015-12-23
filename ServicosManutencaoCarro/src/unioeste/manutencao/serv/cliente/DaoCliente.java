@@ -66,5 +66,46 @@ public class DaoCliente {
           
         return rowCount;
     }
+      
+      public ArrayList<String> clientesByNome(String nome){
+          ArrayList<String> list = new ArrayList<>();
+          String data;
+          try{
+            PreparedStatement stmt = this.connection.prepareStatement("SELECT * FROM cliente WHERE primeiro_nome_cliente LIKE ?");
+            stmt.setString(1, nome + "%");
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                data = rs.getString("primeiro_nome_cliente");
+                list.add(data);
+            }
+          }catch(Exception e){
+              System.out.println(e.getMessage());
+          }
+          return list;
+      }
+      
+      public Cliente clienteByNome(String nome) throws Exception {
+         // executa um select
+        Cliente cliente = new Cliente();
+        try ( // pega a conexão e o Statement
+            
+            PreparedStatement stmt = this.connection.prepareStatement("select * from cliente where primeiro_nome_cliente ='" + nome +"'")) {
+            // executa um select
+            ResultSet rs = stmt.executeQuery();
+           
+            
+            // itera no ResultSet
+            while (rs.next()) {
+              //  String nome = rs.getString("nomeAluno");
+             //   String email = rs.getString("email");                        
+
+               cliente.setIdCliente(rs.getInt("idcliente"));        
+
+            }
+        }catch (Exception e){
+            throw new Exception(e.toString());
+        }
+        return cliente;
+    }
     
 }
