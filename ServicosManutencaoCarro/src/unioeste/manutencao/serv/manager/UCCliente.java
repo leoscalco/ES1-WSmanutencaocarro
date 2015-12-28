@@ -146,5 +146,13 @@ public class UCCliente {
         
         return ret;
     }
+
+    public List<Cliente> listar() throws SQLException, Exception {
+        conn = abrirConexao();
+        DaoCliente col = new DaoCliente(conn);
+        List<Cliente> l = col.listar();
+        fecharConexao();
+        return l;
+    }
     
 }

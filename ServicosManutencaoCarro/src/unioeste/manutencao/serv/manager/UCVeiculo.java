@@ -7,6 +7,8 @@ package unioeste.manutencao.serv.manager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
 import unioeste.geral.bo.veiculo.Marca;
 import unioeste.geral.bo.veiculo.Modelo;
 import unioeste.geral.bo.veiculo.Veiculo;
@@ -72,6 +74,18 @@ public class UCVeiculo {
         daoveiculo.save(veiculo);
         
         fecharConexao();
+    }
+
+    public Map<String, String> autoComplete(String term) throws SQLException {
+        conn = abrirConexao();
+        
+        DaoVeiculo dao = new DaoVeiculo(conn);
+        Map<String, String> ret;
+        ret = dao.VeiculosByPlaca(term);
+        
+        fecharConexao();
+        
+        return ret;
     }
     
 }

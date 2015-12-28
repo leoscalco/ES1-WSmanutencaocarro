@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import unioeste.geral.bo.veiculo.Veiculo;
 
 /**
@@ -54,6 +57,27 @@ public class DaoVeiculo {
         }
           
         return rowCount;
+    }
+
+    public Map<String, String> VeiculosByPlaca(String term) {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+      //  list.add("{");
+        String placa, cliente;
+        try{
+          PreparedStatement stmt = this.connection.prepareStatement("select placa, primeiro_nome_cliente from veiculo, cliente "
+                  + "where placa LIKE ? AND cliente_idcliente = idcliente;");
+          stmt.setString(1, term + "%");
+          ResultSet rs = stmt.executeQuery();
+          while(rs.next()){
+              placa = rs.getString("placa") ;
+              cliente = rs.getString("primeiro_nome_cliente");
+              map.put(placa, cliente);
+          }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    //    list.add("}");
+        return map;
     }
     
 }

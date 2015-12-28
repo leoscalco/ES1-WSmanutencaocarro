@@ -18,7 +18,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import unioeste.geral.bo.pessoa.NomePessoa;
+import unioeste.geral.bo.pessoa.Pessoa;
 import unioeste.geral.bo.pessoafisica.*;
+import unioeste.geral.bo.pessoajuridica.CNPJ;
 
 /**
  *
@@ -106,6 +109,51 @@ public class DaoCliente {
             throw new Exception(e.toString());
         }
         return cliente;
+    }
+
+    public List<Cliente> listar() throws Exception {
+        // executa um select
+        List<Cliente> clientes = new ArrayList<>();
+        try ( // pega a conexão e o Statement
+            
+            PreparedStatement stmt = this.connection.prepareStatement("select * from cliente")) {
+            // executa um select
+            ResultSet rs = stmt.executeQuery();
+           
+            
+            // itera no ResultSet
+            while (rs.next()) {
+              //  String nome = rs.getString("nomeAluno");
+             //   String email = rs.getString("email");                        
+               Cliente cliente = new Cliente();
+               NomePessoa np = new NomePessoa();
+               
+               cliente.setIdCliente(rs.getInt("idcliente"));
+               if (rs.getString("primeiro_nome_cliente") == null){
+                   np.setRazaoSocial(rs.getString("razao_social_cliente"));
+                   np.setNomeFantasia(rs.getString("nome_fantasia_cliente"));
+                   cliente.setTipoPessoa('J');
+               }else{
+                   np.setPrimeiroNome(rs.getString("primeiro_nome_cliente"));
+                   np.setMeioNome(rs.getString("segundo_nome_cliente"));
+                   np.setUltimoNome(rs.getString("ultimo_nome_cliente"));
+                   cliente.setTipoPessoa('F');
+               }              
+               
+               cliente.setNomePessoa(np);
+               
+               
+//               end.setRua(dl.logradouroByCodigo(rs.getInt("logradouro_idlogradouro")));
+//               end.setBairro(db.bairroByCodigo(rs.getInt("bairro_idbairro")));
+//               end.setCidade(dc.cidadeByCodigo(rs.getInt("cidade_idcidade")));
+//      
+//               enderecos.add(end);
+               clientes.add(cliente);
+            }
+        } catch (Exception e){
+            throw new Exception(e.toString());
+        } 
+        return clientes;
     }
     
 }
