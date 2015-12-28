@@ -23,7 +23,29 @@
             <%--<jsp:include page="views/structure/cabecalho.jsp"></jsp:include>--%> 
             <h1>Sistema de Manutenção de Veículos - es1</h1>
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Clientes</div>
+                        <div class="panel-body">
+                          <ul>
+                              <li><a href="views/cliente/cadastrar.jsp">Cadastrar cliente Fisíco</a></li>      
+                              <li><a href="cliente/listar">Listar clientes</a></li>        
+                          </ul>
+                          
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Serviços</div>
+                        <div class="panel-body">
+                            <li><a href="views/servico/cadastrar.jsp">Cadastrar</a></li>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">Veículos</div>
                         <div class="panel-body">
@@ -33,40 +55,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-sm-6">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Clientes</div>
+                        <div class="panel-heading">Ordem de Serviço</div>
                         <div class="panel-body">
-                          <ul>
-                              <li><a href="views/cliente/cadastrar.jsp">Cadastrar cliente Fisíco</a></li>      
-                              <li><a href="views/cliente/listar.jsp">Listar clientes</a></li>        
-                          </ul>
-                          
+                            <li><a href="views/os/cadastrar.jsp">Cadastrar</a></li>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Compras</div>
-                        <div class="panel-body">
-                            <li><a href="views/compra/cadastrar.jsp">Cadastrar</a></li>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Vendas</div>
-                        <div class="panel-body">
-                            <li><a href="views/venda/cadastrar.jsp">Cadastrar</a></li>
-                        </div>
-                    </div>
-                </div>
-
-               
             </div>
             <%--<jsp:include page="views/structure/rodape.jsp"></jsp:include>--%>
         </div>

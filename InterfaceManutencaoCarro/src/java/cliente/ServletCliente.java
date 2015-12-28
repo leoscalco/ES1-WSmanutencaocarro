@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,10 @@ public class ServletCliente extends HttpServlet {
             response.sendRedirect("/InterfaceManutencaoCarro/");
         } else if (action.equals("autocomplete")) {
             autoComplete(request, response);
+        }else if(action.equals("listar")){
+            listar(request, response);
+            RequestDispatcher view = request.getRequestDispatcher("/views/cliente/listar.jsp");    
+            view.forward(request,response); 
         }
     }
 
@@ -196,6 +201,11 @@ public class ServletCliente extends HttpServlet {
         response.getWriter().write(searchList);
       
             
+    }
+
+    private void listar(HttpServletRequest request, HttpServletResponse response) throws SQLException, Exception {
+        UCCliente uc = new UCCliente();
+        request.setAttribute("clientes", uc.listar());
     }
 
 }

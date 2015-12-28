@@ -20,6 +20,14 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>2</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>ServletServico</servlet-name>
+        <servlet-class>servico.ServletServico</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletOrdemServico</servlet-name>
+        <servlet-class>os.ServletOrdemServico</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServletCliente</servlet-name>
         <url-pattern>/ServletCliente</url-pattern>
@@ -27,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>ServletCliente</servlet-name>
         <url-pattern>/cliente/cadastrar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletCliente</servlet-name>
+        <url-pattern>/cliente/listar</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletCliente</servlet-name>
@@ -41,8 +53,28 @@
         <url-pattern>/veiculo/cadastrar</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ServletVeiculo</servlet-name>
+        <url-pattern>/veiculo/autocomplete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>*.htm</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletServico</servlet-name>
+        <url-pattern>/ServletServico</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletServico</servlet-name>
+        <url-pattern>/servico/cadastrar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletOrdemServico</servlet-name>
+        <url-pattern>/ServletOrdemServico</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletOrdemServico</servlet-name>
+        <url-pattern>/os/getNumOS</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -5,9 +5,12 @@
  */
 package veiculo;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -19,6 +22,7 @@ import unioeste.geral.bo.veiculo.Marca;
 import unioeste.geral.bo.veiculo.Modelo;
 import unioeste.geral.bo.veiculo.Veiculo;
 import unioeste.manutencao.bo.cliente.Cliente;
+import unioeste.manutencao.serv.manager.UCCliente;
 import unioeste.manutencao.serv.manager.UCVeiculo;
 
 /**
@@ -43,6 +47,8 @@ public class ServletVeiculo extends HttpServlet {
         if(action.equals("cadastrar")){
             cadastrar(request, response);
                 response.sendRedirect("/InterfaceManutencaoCarro/"); 
+        }else if(action.equals("autocomplete")){
+            autoComplete(request, response);
         }
     }
     
@@ -72,6 +78,26 @@ public class ServletVeiculo extends HttpServlet {
         ucv.cadastrar(veiculo);
         
         
+    }
+    
+    private void autoComplete(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, Exception {
+       
+        response.setContentType("application/json");
+        response.setHeader("Cache-control", "no-cache, no-store");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "-1");
+        String query;
+        query = request.getParameter("term");
+         
+        UCVeiculo uc = new UCVeiculo();
+        Map<String, String> result;
+        
+        result = uc.autoComplete(query);
+        
+        String searchList = new Gson().toJson(result);
+        response.getWriter().write(searchList);
+      
+            
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
