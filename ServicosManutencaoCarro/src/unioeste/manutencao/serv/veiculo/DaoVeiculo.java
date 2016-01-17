@@ -12,7 +12,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import unioeste.geral.bo.veiculo.Modelo;
 import unioeste.geral.bo.veiculo.Veiculo;
+import unioeste.manutencao.bo.cliente.Cliente;
 
 /**
  *
@@ -78,6 +80,63 @@ public class DaoVeiculo {
         }
     //    list.add("}");
         return map;
+    }
+
+    public Veiculo veiculoByPlaca(String placa) {
+        Veiculo veiculo = new Veiculo();
+        Cliente cliente = new Cliente();
+        Modelo modelo = new Modelo();
+        try{
+          PreparedStatement stmt = this.connection.prepareStatement("select * from veiculo "
+                  + "where placa = ?");
+          stmt.setString(1, placa);
+          ResultSet rs = stmt.executeQuery();
+          
+          while(rs.next()){
+              veiculo.setCodigo(rs.getInt("idveiculo"));
+              veiculo.setPlaca(rs.getString("placa"));
+              cliente.setIdCliente(rs.getInt("cliente_idcliente"));
+              veiculo.setChassi(rs.getString("chassi"));
+              veiculo.setAno(rs.getInt("ano"));
+              veiculo.setCor(rs.getString("cor"));
+              modelo.setCodigo(rs.getInt("modelo_idmodelo"));
+              veiculo.setModelo(modelo);
+              veiculo.setCliente(cliente);
+          }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    //    list.add("}");
+        return veiculo;    
+    }
+
+    public Veiculo veiculoByCodigo(int codigo) throws SQLException {
+        Veiculo veiculo = new Veiculo();
+        Cliente cliente = new Cliente();
+        Modelo modelo = new Modelo();
+        DaoModelo daomodelo = new DaoModelo(connection);
+        
+        try{
+          PreparedStatement stmt = this.connection.prepareStatement("select * from veiculo "
+                  + "where idveiculo = ?");
+          stmt.setInt(1, codigo);
+          ResultSet rs = stmt.executeQuery();
+          
+          while(rs.next()){
+              veiculo.setCodigo(rs.getInt("idveiculo"));
+              veiculo.setPlaca(rs.getString("placa"));
+              cliente.setIdCliente(rs.getInt("cliente_idcliente"));
+              veiculo.setChassi(rs.getString("chassi"));
+              veiculo.setAno(rs.getInt("ano"));
+              veiculo.setCor(rs.getString("cor"));
+              veiculo.setModelo(daomodelo.modeloByCodigo(rs.getInt("modelo_idmodelo")));
+              veiculo.setCliente(cliente);
+          }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    //    list.add("}");
+        return veiculo;    
     }
     
 }

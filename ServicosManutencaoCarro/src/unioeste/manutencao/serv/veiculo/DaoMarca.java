@@ -74,4 +74,28 @@ public class DaoMarca {
         }
         return marca;
     }
+
+    Marca marcaByCodigo(int aInt) throws Exception {
+        Marca marca = new Marca();
+        try ( // pega a conexão e o Statement
+            
+            PreparedStatement stmt = this.connection.prepareStatement("select * from marca where idmarca ='" + aInt +"'")) {
+            // executa um select
+            ResultSet rs = stmt.executeQuery();
+           
+            
+            // itera no ResultSet
+            while (rs.next()) {
+              //  String nome = rs.getString("nomeAluno");
+             //   String email = rs.getString("email");                        
+
+               marca.setCodigo(rs.getInt("idmarca"));
+               marca.setNome(rs.getString("nome_marca"));             
+
+            }
+        }catch (Exception e){
+            throw new Exception(e.toString());
+        }
+        return marca;
+    }
 }

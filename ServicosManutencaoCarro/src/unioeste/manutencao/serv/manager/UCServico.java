@@ -7,9 +7,12 @@ package unioeste.manutencao.serv.manager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
 import unioeste.manutencao.bo.ordemServico.TipoServico;
 import unioeste.manutencao.infra.configuracao.ConexaoMySQL;
 import unioeste.manutencao.serv.ordemservico.DaoTipoServico;
+import unioeste.manutencao.serv.veiculo.DaoVeiculo;
 
 /**
  *
@@ -35,5 +38,17 @@ public class UCServico {
         
         fecharConexao();
     }
-    
+
+    public ArrayList<TipoServico> autoComplete(String query) throws SQLException, Exception {
+        conn = abrirConexao();
+        
+        DaoTipoServico dao = new DaoTipoServico(conn);
+        ArrayList<TipoServico> ret;
+        ret = dao.servicosByNome(query);
+        
+        fecharConexao();
+        
+        return ret;
+    }
+
 }

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import unioeste.manutencao.bo.ordemServico.TipoServico;
 
 /**
@@ -70,6 +71,56 @@ public class DaoTipoServico {
 
                ts.setCodigo(rs.getInt("idservico"));
                ts.setNome(rs.getString("nome_servico"));             
+
+            }
+        }catch (Exception e){
+            throw new Exception(e.toString());
+        }
+        return ts;
+    }
+
+    public ArrayList<TipoServico> servicosByNome(String query) throws Exception {
+        ArrayList<TipoServico> ats = new ArrayList<>();
+        try ( // pega a conexão e o Statement
+            
+            PreparedStatement stmt = this.connection.prepareStatement("select * from tipo_servico where nome_servico LIKE '" + query +"%'")) {
+            // executa um select
+            ResultSet rs = stmt.executeQuery();
+           
+            
+            // itera no ResultSet
+            while (rs.next()) {
+              //  String nome = rs.getString("nomeAluno");
+             //   String email = rs.getString("email");                        
+               TipoServico ts = new TipoServico();
+               ts.setCodigo(rs.getInt("idservico"));
+               ts.setNome(rs.getString("nome_servico"));
+               ts.setTempo(rs.getInt("tempo_ref"));
+               ts.setValor(rs.getDouble("valor_ref"));
+               ats.add(ts);
+
+            }
+        }catch (Exception e){
+            throw new Exception(e.toString());
+        }
+        return ats;
+    }
+
+    TipoServico servicoByCodigo(int aInt) throws Exception {
+        TipoServico ts = new TipoServico();
+        try ( // pega a conexão e o Statement
+            
+            PreparedStatement stmt = this.connection.prepareStatement("select * from tipo_servico where idservico ='" + aInt +"'")) {
+            // executa um select
+            ResultSet rs = stmt.executeQuery();
+           
+            
+            // itera no ResultSet
+            while (rs.next()) {
+               ts.setCodigo(rs.getInt("idservico"));
+               ts.setNome(rs.getString("nome_servico"));
+               ts.setTempo(rs.getInt("tempo_ref"));
+               ts.setValor(rs.getDouble("valor_ref"));            
 
             }
         }catch (Exception e){

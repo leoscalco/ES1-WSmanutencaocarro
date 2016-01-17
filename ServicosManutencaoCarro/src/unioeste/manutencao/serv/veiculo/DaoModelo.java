@@ -76,5 +76,31 @@ public class DaoModelo {
         }
         return modelo;
     }
+
+    Modelo modeloByCodigo(int aInt) throws Exception {
+         Modelo modelo = new Modelo();
+         DaoMarca daomarca = new DaoMarca(connection);
+        try ( // pega a conexão e o Statement
+            
+            PreparedStatement stmt = this.connection.prepareStatement("select * from modelo where idmodelo ='" + aInt +"'")) {
+            // executa um select
+            ResultSet rs = stmt.executeQuery();
+           
+            
+            // itera no ResultSet
+            while (rs.next()) {
+              //  String nome = rs.getString("nomeAluno");
+             //   String email = rs.getString("email");                        
+
+               modelo.setCodigo(rs.getInt("idmodelo"));
+               modelo.setNome(rs.getString("nome_modelo"));  
+               modelo.setMarca(daomarca.marcaByCodigo(rs.getInt("marca_idmarca")));
+
+            }
+        }catch (Exception e){
+            throw new Exception(e.toString());
+        }
+        return modelo;
+    }
     
 }

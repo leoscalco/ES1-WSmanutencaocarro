@@ -155,5 +155,39 @@ public class DaoCliente {
         } 
         return clientes;
     }
+
+    public Cliente clienteByCodigo(int idCliente) throws Exception {
+        Cliente cliente = new Cliente();
+        try ( // pega a conexão e o Statement
+            
+            PreparedStatement stmt = this.connection.prepareStatement("select * from cliente where idcliente ='" + idCliente +"'")) {
+            // executa um select
+            ResultSet rs = stmt.executeQuery();
+           
+            
+            // itera no ResultSet
+            while (rs.next()) {
+               NomePessoa np = new NomePessoa();
+               
+               cliente.setIdCliente(rs.getInt("idcliente"));
+               if (rs.getString("primeiro_nome_cliente") == null){
+                   np.setRazaoSocial(rs.getString("razao_social_cliente"));
+                   np.setNomeFantasia(rs.getString("nome_fantasia_cliente"));
+                   cliente.setTipoPessoa('J');
+               }else{
+                   np.setPrimeiroNome(rs.getString("primeiro_nome_cliente"));
+                   np.setMeioNome(rs.getString("segundo_nome_cliente"));
+                   np.setUltimoNome(rs.getString("ultimo_nome_cliente"));
+                   cliente.setTipoPessoa('F');
+               }              
+               
+               cliente.setNomePessoa(np);
+
+            }
+        }catch (Exception e){
+            throw new Exception(e.toString());
+        }
+        return cliente;
+    }
     
 }
