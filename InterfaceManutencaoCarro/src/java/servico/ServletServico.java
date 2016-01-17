@@ -5,9 +5,14 @@
  */
 package servico;
 
+
+import java.lang.reflect.Type;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -16,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import unioeste.manutencao.bo.ordemServico.TipoServico;
 import unioeste.manutencao.serv.manager.UCServico;
+
 
 /**
  *
@@ -39,6 +45,8 @@ public class ServletServico extends HttpServlet {
         if (action.equals("cadastrar")) {
             cadastrar(request, response);
             response.sendRedirect("/InterfaceManutencaoCarro/");
+        }else if(action.equals("autocomplete")){
+            autoComplete(request, response);
         }
     }
 
@@ -50,6 +58,26 @@ public class ServletServico extends HttpServlet {
         
         UCServico ucs = new UCServico();
         ucs.cadastrar(ts);
+    }
+    
+     private void autoComplete(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, Exception {
+       
+        response.setContentType("application/json");
+        response.setHeader("Cache-control", "no-cache, no-store");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "-1");
+        String query;
+        query = request.getParameter("term");
+         
+        UCServico uc = new UCServico();
+        ArrayList<TipoServico> result;
+        
+        result = uc.autoComplete(query);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<TipoServico>>() {}.getType();
+        String json = gson.toJson(result, type);
+
+        response.getWriter().write(new Gson().toJson(json));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

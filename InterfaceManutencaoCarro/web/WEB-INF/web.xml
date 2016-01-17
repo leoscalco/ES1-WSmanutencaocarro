@@ -69,12 +69,36 @@
         <url-pattern>/servico/cadastrar</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ServletServico</servlet-name>
+        <url-pattern>/servico/autocomplete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ServletOrdemServico</servlet-name>
         <url-pattern>/ServletOrdemServico</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletOrdemServico</servlet-name>
         <url-pattern>/os/getNumOS</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>ServletOrdemServico</servlet-name>
+        <url-pattern>/os/cadastrar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletOrdemServico</servlet-name>
+        <url-pattern>/os/listar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletOrdemServico</servlet-name>
+        <url-pattern>/os/addservicos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletOrdemServico</servlet-name>
+        <url-pattern>/os/detalhe</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletOrdemServico</servlet-name>
+        <url-pattern>/os/update</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

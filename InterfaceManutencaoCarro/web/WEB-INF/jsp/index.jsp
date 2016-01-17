@@ -8,6 +8,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
         <!-- Optional theme -->
@@ -17,6 +20,12 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Estoque</title>
+        <style>
+
+        </style>
+        <script>
+            
+        </script>
     </head>
     <body>
         <div class="container">
@@ -60,10 +69,15 @@
                         <div class="panel-heading">Ordem de Serviço</div>
                         <div class="panel-body">
                             <li><a href="views/os/cadastrar.jsp">Cadastrar</a></li>
+                            <li><a href="os/listar">Ordens de Serviço</a></li> 
                         </div>
                     </div>
                 </div>
             </div>
+            
+           
+			
+
             <%--<jsp:include page="views/structure/rodape.jsp"></jsp:include>--%>
         </div>
     </body>
