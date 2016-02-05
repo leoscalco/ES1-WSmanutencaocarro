@@ -18,6 +18,8 @@ import unioeste.geral.bo.veiculo.Veiculo;
 import unioeste.manutencao.bo.cliente.Cliente;
 import unioeste.manutencao.bo.ordemServico.OrdemServico;
 import unioeste.manutencao.bo.ordemServico.TipoServico;
+import unioeste.manutencao.serv.cliente.DaoCliente;
+import unioeste.manutencao.serv.veiculo.DaoVeiculo;
 
 /**
  *
@@ -78,6 +80,38 @@ public class DaoOrdemServico {
               System.out.println(e.getMessage());
             }
             return list;
+    }
+    
+    public ArrayList<OrdemServico> listar() throws SQLException{
+        ArrayList<OrdemServico> list = new ArrayList<>();
+        DaoVeiculo daoveiculo = new DaoVeiculo(connection);
+        DaoCliente daocliente = new DaoCliente(connection);
+         
+        try(PreparedStatement stmt = this.connection.prepareStatement("SELECT * FROM ordem_servico")){
+          ResultSet rs = stmt.executeQuery();
+          while(rs.next()){
+              OrdemServico os = new OrdemServico();
+              os.setCodigo(rs.getInt("idordem_servico"));
+              os.setDataAbertura(rs.getDate("data_abertura"));
+              os.setDescricao(rs.getString("descricao"));
+              os.setDataInicio(rs.getDate("data_inicio"));
+              os.setDataFim(rs.getDate("data_fim"));
+              os.setValorTotal(rs.getDouble("valor_total"));
+              Veiculo veiculo = daoveiculo.veiculoByCodigo(rs.getInt("veiculo_idveiculo"));
+              if (rs.getString("situacao") != null){
+                os.setSituacao(rs.getString("situacao").charAt(0));
+              }
+              
+              os.setVeiculo(veiculo);
+              Cliente cliente = daocliente.clienteByCodigo(rs.getInt("cliente_idcliente"));
+              os.setCliente(cliente);
+              os.setTipoServico(getServicos(os.getCodigo()));
+              list.add(os);
+          }
+          }catch(Exception e){
+            System.out.println(e.getMessage());
+          }
+          return list;
     }
 
     public OrdemServico getOSbyCodigo(int codigo) {
@@ -153,5 +187,4 @@ public class DaoOrdemServico {
             }
             return lts;
     }
-    
 }

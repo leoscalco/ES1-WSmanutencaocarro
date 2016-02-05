@@ -128,4 +128,31 @@ public class DaoTipoServico {
         }
         return ts;
     }
+
+    public ArrayList<TipoServico> listar() throws Exception {
+        ArrayList<TipoServico> ats = new ArrayList<>();
+        try ( // pega a conexão e o Statement
+            
+            PreparedStatement stmt = this.connection.prepareStatement("select * from tipo_servico")) {
+            // executa um select
+            ResultSet rs = stmt.executeQuery();
+           
+            
+            // itera no ResultSet
+            while (rs.next()) {
+              //  String nome = rs.getString("nomeAluno");
+             //   String email = rs.getString("email");                        
+               TipoServico ts = new TipoServico();
+               ts.setCodigo(rs.getInt("idservico"));
+               ts.setNome(rs.getString("nome_servico"));
+               ts.setTempo(rs.getInt("tempo_ref"));
+               ts.setValor(rs.getDouble("valor_ref"));
+               ats.add(ts);
+
+            }
+        }catch (Exception e){
+            throw new Exception(e.toString());
+        }
+        return ats;    
+    }
 }

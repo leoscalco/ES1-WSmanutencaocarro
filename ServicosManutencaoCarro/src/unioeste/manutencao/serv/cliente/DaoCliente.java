@@ -18,10 +18,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import unioeste.geral.bo.pessoa.EnderecoEspecifico;
 import unioeste.geral.bo.pessoa.NomePessoa;
 import unioeste.geral.bo.pessoa.Pessoa;
 import unioeste.geral.bo.pessoafisica.*;
 import unioeste.geral.bo.pessoajuridica.CNPJ;
+import unioeste.manutencao.serv.endereco.DaoEndereco;
 
 /**
  *
@@ -119,7 +121,8 @@ public class DaoCliente {
             PreparedStatement stmt = this.connection.prepareStatement("select * from cliente")) {
             // executa um select
             ResultSet rs = stmt.executeQuery();
-           
+            List<EnderecoEspecifico> lee = new ArrayList<>();
+            DaoEndereco de = new DaoEndereco(connection);
             
             // itera no ResultSet
             while (rs.next()) {
@@ -141,7 +144,12 @@ public class DaoCliente {
                }              
                
                cliente.setNomePessoa(np);
-               
+               EnderecoEspecifico ee = new EnderecoEspecifico();
+               ee.setComplementoEndereco(rs.getString("complemento_endereco"));
+               ee.setEndereco(de.enderecoByCodigo(rs.getInt("endereco_idendereco")));
+               ee.setNroEndereco(rs.getInt("numero_endereco"));
+               lee.add(ee);
+               cliente.setEnderecoEspecifico(lee);
                
 //               end.setRua(dl.logradouroByCodigo(rs.getInt("logradouro_idlogradouro")));
 //               end.setBairro(db.bairroByCodigo(rs.getInt("bairro_idbairro")));

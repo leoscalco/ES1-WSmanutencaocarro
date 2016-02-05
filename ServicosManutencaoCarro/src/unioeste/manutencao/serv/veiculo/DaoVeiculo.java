@@ -15,6 +15,7 @@ import java.util.Map;
 import unioeste.geral.bo.veiculo.Modelo;
 import unioeste.geral.bo.veiculo.Veiculo;
 import unioeste.manutencao.bo.cliente.Cliente;
+import unioeste.manutencao.serv.cliente.DaoCliente;
 
 /**
  *
@@ -138,5 +139,31 @@ public class DaoVeiculo {
     //    list.add("}");
         return veiculo;    
     }
+
+    public ArrayList<Veiculo> listar() throws SQLException {
+        Veiculo veiculo = new Veiculo();
+        DaoModelo daomodelo = new DaoModelo(connection);
+        DaoCliente daocliente = new DaoCliente(connection);
+        ArrayList<Veiculo> arr = new ArrayList<>();
+        
+        try{
+          PreparedStatement stmt = this.connection.prepareStatement("select * from veiculo");
+          ResultSet rs = stmt.executeQuery();
+          
+          while(rs.next()){
+              veiculo.setCodigo(rs.getInt("idveiculo"));
+              veiculo.setPlaca(rs.getString("placa"));
+              veiculo.setChassi(rs.getString("chassi"));
+              veiculo.setAno(rs.getInt("ano"));
+              veiculo.setCor(rs.getString("cor"));
+              veiculo.setModelo(daomodelo.modeloByCodigo(rs.getInt("modelo_idmodelo")));
+              veiculo.setCliente(daocliente.clienteByCodigo(rs.getInt("cliente_idcliente")));
+              arr.add(veiculo);
+          }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    //    list.add("}");
+        return arr;        }
     
 }

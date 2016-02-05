@@ -22,31 +22,58 @@ public class UCServico {
     
     Connection conn;
     
-     public Connection abrirConexao(){
+     public Connection abrirConexao() throws Exception{
         return ConexaoMySQL.getConexaoMySQL();
     }
     
-    public void fecharConexao(){
+    public void fecharConexao() throws Exception{
         ConexaoMySQL.FecharConexao();
     }
     
     public void cadastrar(TipoServico tiposervico) throws SQLException, Exception{
         conn = abrirConexao();
-        
-        DaoTipoServico dao = new DaoTipoServico(conn);
-        dao.save(tiposervico);
-        
-        fecharConexao();
+        conn.setAutoCommit(false);
+        try{
+            DaoTipoServico dao = new DaoTipoServico(conn);
+            dao.save(tiposervico);
+            conn.commit();
+        }catch(Exception e){
+            throw e;
+        }finally{
+            fecharConexao();
+        }
     }
 
     public ArrayList<TipoServico> autoComplete(String query) throws SQLException, Exception {
         conn = abrirConexao();
-        
-        DaoTipoServico dao = new DaoTipoServico(conn);
+        conn.setAutoCommit(false);
         ArrayList<TipoServico> ret;
-        ret = dao.servicosByNome(query);
+        try{
+            DaoTipoServico dao = new DaoTipoServico(conn);
+            ret = dao.servicosByNome(query);
+            conn.commit();
+        }catch(Exception e){
+            throw e;
+        }finally{
+            fecharConexao();
+        }
         
-        fecharConexao();
+        return ret;
+    }
+
+    public ArrayList<TipoServico> listar() throws SQLException, Exception {
+        conn = abrirConexao();
+        conn.setAutoCommit(false);
+        ArrayList<TipoServico> ret;
+        try{
+            DaoTipoServico dao = new DaoTipoServico(conn);
+            ret = dao.listar();
+            conn.commit();
+        }catch(Exception e){
+            throw e;
+        }finally{
+            fecharConexao();
+        }
         
         return ret;
     }

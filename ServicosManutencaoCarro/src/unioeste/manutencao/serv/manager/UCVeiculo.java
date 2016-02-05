@@ -26,66 +26,91 @@ public class UCVeiculo {
     
     Connection conn;
     
-     public Connection abrirConexao(){
+     public Connection abrirConexao() throws Exception{
         return ConexaoMySQL.getConexaoMySQL();
     }
     
-    public void fecharConexao(){
+    public void fecharConexao() throws Exception{
         ConexaoMySQL.FecharConexao();
     }
     
     public void cadastrar(Veiculo veiculo) throws SQLException, Exception{
         conn = abrirConexao();
-        
-        DaoCliente daocliente = new DaoCliente(conn);
-        veiculo.setCliente(daocliente.clienteByNome(veiculo.getCliente().getNomePessoa().getPrimeiroNome()));
-        
-        DaoMarca daomarca = new DaoMarca(conn);
-        Marca marcaBusca = daomarca.marcaByNome(veiculo.getModelo().getMarca().getNome());
-        
-         if(marcaBusca.getNome() == null){
-            daomarca.save(veiculo.getModelo().getMarca());
-            veiculo.getModelo().setMarca(daomarca.marcaByNome(veiculo.getModelo().getMarca().getNome()));
-        }else{
-            if(!marcaBusca.getNome().equals(veiculo.getModelo().getMarca().getNome())){
+        conn.setAutoCommit(false);
+        try{
+            DaoCliente daocliente = new DaoCliente(conn);
+            veiculo.setCliente(daocliente.clienteByNome(veiculo.getCliente().getNomePessoa().getPrimeiroNome()));
+
+            DaoMarca daomarca = new DaoMarca(conn);
+            Marca marcaBusca = daomarca.marcaByNome(veiculo.getModelo().getMarca().getNome());
+
+             if(marcaBusca.getNome() == null){
                 daomarca.save(veiculo.getModelo().getMarca());
-                veiculo.getModelo().setMarca(daomarca.marcaByNome(veiculo.getModelo().getMarca().getNome())); 
+                veiculo.getModelo().setMarca(daomarca.marcaByNome(veiculo.getModelo().getMarca().getNome()));
             }else{
-                veiculo.getModelo().setMarca(marcaBusca);
+                if(!marcaBusca.getNome().equals(veiculo.getModelo().getMarca().getNome())){
+                    daomarca.save(veiculo.getModelo().getMarca());
+                    veiculo.getModelo().setMarca(daomarca.marcaByNome(veiculo.getModelo().getMarca().getNome())); 
+                }else{
+                    veiculo.getModelo().setMarca(marcaBusca);
+                }
             }
-        }
-         
-        DaoModelo daomodelo = new DaoModelo(conn);
-        Modelo modeloBusca = daomodelo.modeloByNome(veiculo.getModelo().getNome());
-        
-        if(modeloBusca.getNome() == null){
-            daomodelo.save(veiculo.getModelo());
-            veiculo.setModelo(daomodelo.modeloByNome(veiculo.getModelo().getNome()));
-        }else{
-            if(!modeloBusca.getNome().equals(veiculo.getModelo().getNome())){
+
+            DaoModelo daomodelo = new DaoModelo(conn);
+            Modelo modeloBusca = daomodelo.modeloByNome(veiculo.getModelo().getNome());
+
+            if(modeloBusca.getNome() == null){
                 daomodelo.save(veiculo.getModelo());
-                veiculo.setModelo(daomodelo.modeloByNome(veiculo.getModelo().getNome())); 
+                veiculo.setModelo(daomodelo.modeloByNome(veiculo.getModelo().getNome()));
             }else{
-                veiculo.setModelo(modeloBusca);
-            }
-        }  
-        
-        DaoVeiculo daoveiculo = new DaoVeiculo(conn);
-        daoveiculo.save(veiculo);
-        
-        fecharConexao();
+                if(!modeloBusca.getNome().equals(veiculo.getModelo().getNome())){
+                    daomodelo.save(veiculo.getModelo());
+                    veiculo.setModelo(daomodelo.modeloByNome(veiculo.getModelo().getNome())); 
+                }else{
+                    veiculo.setModelo(modeloBusca);
+                }
+            }  
+
+            DaoVeiculo daoveiculo = new DaoVeiculo(conn);
+            daoveiculo.save(veiculo);
+            conn.commit();
+        }catch(Exception e){
+            throw e;
+        }finally{
+            fecharConexao();
+        }
     }
 
-    public Map<String, String> autoComplete(String term) throws SQLException {
+    public Map<String, String> autoComplete(String term) throws SQLException, Exception {
         conn = abrirConexao();
-        
-        DaoVeiculo dao = new DaoVeiculo(conn);
+        conn.setAutoCommit(false);
         Map<String, String> ret;
-        ret = dao.VeiculosByPlaca(term);
-        
-        fecharConexao();
-        
+        try{
+            DaoVeiculo dao = new DaoVeiculo(conn);
+            ret = dao.VeiculosByPlaca(term);
+            conn.commit();
+        }catch(Exception e){
+            throw e;
+        }finally{
+            fecharConexao();
+        }
         return ret;
+    }
+
+    public ArrayList<Veiculo> listar() throws Exception {
+        conn = abrirConexao();
+        conn.setAutoCommit(false);
+        ArrayList<Veiculo> ret;
+        try{
+            DaoVeiculo dao = new DaoVeiculo(conn);
+            ret = dao.listar();
+            conn.commit();
+        }catch(Exception e){
+            throw e;
+        }finally{
+            fecharConexao();
+        }
+        return ret;    
     }
     
 }
