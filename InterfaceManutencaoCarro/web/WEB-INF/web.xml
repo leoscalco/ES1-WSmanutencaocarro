@@ -80,7 +80,7 @@
         <servlet-name>ServletOrdemServico</servlet-name>
         <url-pattern>/os/getNumOS</url-pattern>
     </servlet-mapping>
-     <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ServletOrdemServico</servlet-name>
         <url-pattern>/os/cadastrar</url-pattern>
     </servlet-mapping>

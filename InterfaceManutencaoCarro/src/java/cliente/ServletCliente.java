@@ -8,6 +8,9 @@ package cliente;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +21,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.jasper.tagplugins.jstl.core.Redirect;
 import unioeste.manutencao.bo.cliente.*;
 import unioeste.manutencao.serv.manager.UCCliente;
 import unioeste.geral.bo.endereco.*;
 import unioeste.geral.bo.pessoa.*;
 import unioeste.geral.bo.pessoafisica.*;
 import unioeste.geral.bo.telefone.*;
-import unioeste.manutencao.serv.cliente.DaoCliente;
 
 /**
  *
@@ -204,8 +205,9 @@ public class ServletCliente extends HttpServlet {
     }
 
     private void listar(HttpServletRequest request, HttpServletResponse response) throws SQLException, Exception {
-        UCCliente uc = new UCCliente();
-        request.setAttribute("clientes", uc.listar());
+        Registry registry = LocateRegistry.getRegistry(1099);
+        RmiServer rmiserver = (RmiServer) registry.lookup("clientesRMI");
+        request.setAttribute("clientes", rmiserver.listarClientes());
     }
 
 }
